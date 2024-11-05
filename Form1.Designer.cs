@@ -1,4 +1,4 @@
-﻿using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace turnbinds
 {
