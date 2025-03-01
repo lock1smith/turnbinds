@@ -85,14 +85,11 @@ namespace turnbinds
         public Form1()
         {
             InitializeComponent();
-
-            // Match AHK's initialization settings exactly
             Process currentProcess = Process.GetCurrentProcess();
             SetPriorityClass(currentProcess.Handle, HIGH_PRIORITY_CLASS);
             SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
             timeBeginPeriod(1);
 
-            // Initialize controls
             if (speedTrackBar != null)
             {
                 speedTrackBar.Minimum = 50;
@@ -128,16 +125,12 @@ namespace turnbinds
                 rightKeybindLabel.Text = "<unassigned>";
             if (speedKeybindLabel != null)
                 speedKeybindLabel.Text = "<unassigned>";
-
-            // Set up event handlers
             if (speedTrackBar != null)
                 speedTrackBar.ValueChanged += SpeedTrackBar_ValueChanged;
             if (plusSpeedTrackBar != null)
                 plusSpeedTrackBar.ValueChanged += PlusSpeedTrackBar_ValueChanged;
             if (globalMultiplierTrackBar != null)
                 globalMultiplierTrackBar.ValueChanged += GlobalMultiplierTrackBar_ValueChanged;
-
-            // Initialize configuration system
             configFolder = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "turnbindz"
@@ -145,11 +138,8 @@ namespace turnbinds
             currentGameConfig = "Default";
             InitializeConfig();
             SetupGameSelector();
-
-            // Initialize checkboxes and tray functionality
             InitializeCheckboxes();
 
-            // Load initial configuration
             if (openToLastConfig && !string.IsNullOrEmpty(lastLoadedConfig))
             {
                 currentGameConfig = lastLoadedConfig;
@@ -158,8 +148,7 @@ namespace turnbinds
                     gameSelectComboBox.SelectedItem = currentGameConfig;
             }
             LoadConfig(currentGameConfig);
-
-            // Set up keyboard listener
+            
             keyboardListener = new LowLevelKeyboardListener();
             if (keyboardListener != null)
             {
@@ -171,7 +160,6 @@ namespace turnbinds
 
         private void InitializeCheckboxes()
         {
-            // Set up tray icon with context menu
             var contextMenu = new ContextMenuStrip();
             contextMenu.Items.Add("Open", null, (s, e) => RestoreFromTray());
             contextMenu.Items.Add("Exit", null, (s, e) => {
@@ -188,7 +176,6 @@ namespace turnbinds
                 ContextMenuStrip = contextMenu
             };
 
-            // Add single click handler
             if (trayIcon != null)
             {
                 trayIcon.Click += (s, e) => {
@@ -198,17 +185,13 @@ namespace turnbinds
                     }
                 };
             }
-
-            // Load global settings
+            
             LoadGlobalSettings();
-
-            // Set checkbox states
+            
             if (openLastConfigCheckBox != null)
                 openLastConfigCheckBox.Checked = openToLastConfig;
             if (minimizeToTrayCheckBox != null)
                 minimizeToTrayCheckBox.Checked = minimizeToTray;
-
-            // Add event handlers
             if (openLastConfigCheckBox != null)
                 openLastConfigCheckBox.CheckedChanged += OpenLastConfigCheckBox_CheckedChanged;
             if (minimizeToTrayCheckBox != null)
@@ -217,7 +200,7 @@ namespace turnbinds
         }
         public void ActivateFromTray()
         {
-            if (!this.Visible)  // If in tray
+            if (!this.Visible) 
             {
                 this.Show();
                 if (trayIcon != null)
@@ -231,7 +214,7 @@ namespace turnbinds
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
-            this.Activate();  // Brings window to front
+            this.Activate(); 
             if (trayIcon != null)
                 trayIcon.Visible = false;
         }
@@ -243,7 +226,7 @@ namespace turnbinds
                 string[] lines = {
                     $"OpenToLastConfig={openToLastConfig}",
                     $"MinimizeToTray={minimizeToTray}",
-                    $"LastLoadedConfig={currentGameConfig}"  // Save current config as last loaded
+                    $"LastLoadedConfig={currentGameConfig}" 
                 };
                 File.WriteAllLines(Path.Combine(configFolder, SETTINGS_FILE), lines);
             }
@@ -283,13 +266,11 @@ namespace turnbinds
                 }
                 else
                 {
-                    // Create default settings file if it doesn't exist
                     SaveGlobalSettings();
                 }
             }
             catch
             {
-                // If loading fails, use defaults
                 openToLastConfig = false;
                 minimizeToTray = false;
                 lastLoadedConfig = "Default";
@@ -358,10 +339,7 @@ namespace turnbinds
                 }
             }
 
-            // Load global settings first
             LoadGlobalSettings();
-
-            // Set initial config based on settings
             currentGameConfig = openToLastConfig ? lastLoadedConfig : "Default";
             selectedConfig = currentGameConfig;
             hasUnsavedChanges = false;
@@ -679,7 +657,7 @@ namespace turnbinds
                     }
                     catch (OperationCanceledException)
                     {
-                        // Normal cancellation, do nothing
+                    
                     }
                     finally
                     {
@@ -709,7 +687,7 @@ namespace turnbinds
                     }
                     catch (OperationCanceledException)
                     {
-                        // Normal cancellation, do nothing
+                    
                     }
                     finally
                     {
@@ -809,7 +787,6 @@ namespace turnbinds
                 }
             }
 
-            // Clean up resources
             leftCancellation?.Cancel();
             rightCancellation?.Cancel();
             timeEndPeriod(1);
