@@ -86,8 +86,6 @@ namespace turnbinds
             {
                 Graphics g = bg.Graphics;
                 g.Clear(this.BackColor);
-
-                // Draw the slider bar
                 int barHeight = 4;
                 int barY = this.Height / 2 - barHeight / 2;
                 using (var brush = new SolidBrush(Color.Black))
@@ -95,7 +93,6 @@ namespace turnbinds
                     g.FillRectangle(brush, new Rectangle(0, barY, this.Width, barHeight));
                 }
 
-                // Calculate and draw the thumb
                 int thumbWidth = 10;
                 int thumbHeight = 20;
                 float valuePercentage = (Value - Minimum) / (float)(Maximum - Minimum);
